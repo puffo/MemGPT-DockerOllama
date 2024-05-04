@@ -1,43 +1,54 @@
-<p align="center">
-  <a href="https://memgpt.ai"><img src="https://github.com/cpacker/MemGPT/assets/5475622/80f2f418-ef92-4f7a-acab-5d642faa4991" alt="MemGPT logo"></a>
-</p>
+# MemGPT - Docker+Ollama Fork
 
 <div align="center">
 
  <strong>MemGPT allows you to build LLM agents with long term memory & custom tools</strong>
 
-[![Discord](https://img.shields.io/discord/1161736243340640419?label=Discord&logo=discord&logoColor=5865F2&style=flat-square&color=5865F2)](https://discord.gg/9GEQrxmVyE)
-[![arxiv 2310.08560](https://img.shields.io/badge/arXiv-2310.08560-B31B1B?logo=arxiv&style=flat-square)](https://arxiv.org/abs/2310.08560)
-[![Documentation](https://img.shields.io/github/v/release/cpacker/MemGPT?label=Documentation&logo=readthedocs&style=flat-square)](https://memgpt.readme.io/docs)
+ This fork allows for easy `docker compose up --build` so that Ollama running on host system can be communicated with from within the docker container.
+
+ Host system:
+
+ ```
+ ollama pull dolphin-mistral:7b-v2.8-q6_K
+ docker compose up --build
+ ollama serve
+ ```
+
+ Once running, the dev portal is available to host system over <a href="http://0.0.0.0:8083" > here </a>
+
+ See `configs/server_config.yaml`, `compose.yaml`, `nginx.conf` for the networking and model configuration details.
+
+ `llama-index-embeddings-huggingface` has also been set as required in the `pyproject.toml` file.
 
 </div>
 
-MemGPT makes it easy to build and deploy stateful LLM agents with support for: 
-* Long term memory/state management 
-* Connections to [external data sources](https://memgpt.readme.io/docs/data_sources) (e.g. PDF files) for RAG 
+
+---
+
+MemGPT makes it easy to build and deploy stateful LLM agents with support for:
+* Long term memory/state management
+* Connections to [external data sources](https://memgpt.readme.io/docs/data_sources) (e.g. PDF files) for RAG
 * Defining and calling [custom tools](https://memgpt.readme.io/docs/functions) (e.g. [google search](https://github.com/cpacker/MemGPT/blob/main/examples/google_search.py))
 
 You can also use MemGPT to depoy agents as a *service*. You can use a MemGPT server to run a multi-user, multi-agent application on top of supported LLM providers.
 
-<img width="1000" alt="image" src="https://github.com/cpacker/MemGPT/assets/8505980/1096eb91-139a-4bc5-b908-fa585462da09">
 
-
-## Installation & Setup   
+## Installation & Setup
 Install MemGPT:
 ```sh
 pip install -U pymemgpt
 ```
-To use MemGPT with OpenAI, set the environment variable `OPENAI_API_KEY` to your OpenAI key then run: 
+To use MemGPT with OpenAI, set the environment variable `OPENAI_API_KEY` to your OpenAI key then run:
 ```
 memgpt quickstart --backend openai
 ```
-To use MemGPT with a free hosted endpoint, you run run: 
+To use MemGPT with a free hosted endpoint, you run run:
 ```
 memgpt quickstart --backend memgpt
 ```
-For more advanced configuration options or to use a different [LLM backend](https://memgpt.readme.io/docs/endpoints) or [local LLMs](https://memgpt.readme.io/docs/local_llm), run `memgpt configure`. 
+For more advanced configuration options or to use a different [LLM backend](https://memgpt.readme.io/docs/endpoints) or [local LLMs](https://memgpt.readme.io/docs/local_llm), run `memgpt configure`.
 
-## Quickstart (CLI)  
+## Quickstart (CLI)
 You can create and chat with a MemGPT agent by running `memgpt run` in your CLI. The `run` command supports the following optional flags (see the [CLI documentation](https://memgpt.readme.io/docs/quickstart) for the full list of flags):
 * `--agent`: (str) Name of agent to create or to resume chatting with.
 * `--first`: (str) Allow user to sent the first message.
@@ -50,25 +61,23 @@ You can view the list of available in-chat commands (e.g. `/memory`, `/exit`) in
 ## Dev portal (alpha build)
 MemGPT provides a developer portal that enables you to easily create, edit, monitor, and chat with your MemGPT agents. The easiest way to use the dev portal is to install MemGPT via **docker** (see instructions below).
 
-<img width="1000" alt="image" src="https://github.com/cpacker/MemGPT/assets/5475622/071117c5-46a7-4953-bc9d-d74880e66258">
+## Quickstart (Server)
 
-## Quickstart (Server)  
-
-**Option 1 (Recommended)**: Run with docker compose  
+**Option 1 (Recommended)**: Run with docker compose
 1. [Install docker on your system](https://docs.docker.com/get-docker/)
 2. Clone the repo: `git clone git@github.com:cpacker/MemGPT.git`
 3. Run `docker compose up`
-4. Go to `memgpt.localhost` in the browser to view the developer portal 
+4. Go to `memgpt.localhost` in the browser to view the developer portal
 
 **Option 2:** Run with the CLI:
 1. Run `memgpt server`
-2. Go to `localhost:8283` in the browser to view the developer portal 
+2. Go to `localhost:8283` in the browser to view the developer portal
 
-Once the server is running, you can use the [Python client](https://memgpt.readme.io/docs/admin-client) or [REST API](https://memgpt.readme.io/reference/api) to connect to `memgpt.localhost` (if you're running with docker compose) or `localhost:8283` (if you're running with the CLI) to create users, agents, and more. The service requires authentication with a MemGPT admin password, which can be set with running `export MEMGPT_SERVER_PASS=password`. 
+Once the server is running, you can use the [Python client](https://memgpt.readme.io/docs/admin-client) or [REST API](https://memgpt.readme.io/reference/api) to connect to `memgpt.localhost` (if you're running with docker compose) or `localhost:8283` (if you're running with the CLI) to create users, agents, and more. The service requires authentication with a MemGPT admin password, which can be set with running `export MEMGPT_SERVER_PASS=password`.
 
 
-## Supported Endpoints & Backends 
-MemGPT is designed to be model and provider agnostic. The following LLM and embedding endpoints are supported: 
+## Supported Endpoints & Backends
+MemGPT is designed to be model and provider agnostic. The following LLM and embedding endpoints are supported:
 
 | Provider            | LLM Endpoint    | Embedding Endpoint |
 |---------------------|-----------------|--------------------|
@@ -100,6 +109,6 @@ By using MemGPT and related MemGPT services (such as the MemGPT endpoint or host
 ## Roadmap
 You can view (and comment on!) the MemGPT developer roadmap on GitHub: https://github.com/cpacker/MemGPT/issues/1200.
 
-## Benchmarking 
+## Benchmarking
 To evaluate the performance of a model on MemGPT, simply configure the appropriate model settings using `memgpt configure`, and then initiate the benchmark via `memgpt benchmark`. The duration will vary depending on your hardware. This will run through a predefined set of prompts through multiple iterations to test the function calling capabilities of a model. You can help track what LLMs work well with MemGPT by contributing your benchmark results via [this form](https://forms.gle/XiBGKEEPFFLNSR348), which will be used to update the spreadsheet.
 

@@ -4,17 +4,16 @@ persona = sam_pov
 human = basic
 
 [model]
-model = gpt-4
-model_endpoint = https://api.openai.com/v1
-model_endpoint_type = openai
-model_wrapper = null
-context_window = 8192
+model = dolphin-mistral:7b-v2.8-q6_K
+model_endpoint = http://host.docker.internal:11434
+model_endpoint_type = ollama
+model_wrapper = airoboros-l2-70b-2.1
+context_window = 32768
 
 [embedding]
-embedding_endpoint_type = openai
-embedding_endpoint = https://api.openai.com/v1
-embedding_model = text-embedding-ada-002
-embedding_dim = 1536
+embedding_endpoint_type = local
+embedding_model = BAAI/bge-small-en-v1.5
+embedding_dim = 384
 embedding_chunk_size = 300
 
 [archival_storage]
@@ -32,5 +31,9 @@ type = postgres
 path = /root/.memgpt
 uri = postgresql+pg8000://memgpt:memgpt@pgvector_db:5432/memgpt
 
+[version]
+memgpt_version = 0.3.14
+
 [client]
 anon_clientid = 00000000-0000-0000-0000-000000000000
+
